@@ -11,13 +11,11 @@ public class Rational implements Cloneable, Comparable<Rational> {
         return b;
     }
 
-    public Rational() {
-    }
+    public Rational() {}
 
     public Rational(int a) {
         Numerator = a;
     }
-
     public Rational(int num, int denom) throws IOException {
         if (denom == 0) {
             throw new IOException("Denominator can't be equal to 0");
@@ -29,17 +27,25 @@ public class Rational implements Cloneable, Comparable<Rational> {
             Denominator = -Denominator;
         }
     }
-
     public Rational(Rational r) {
         Numerator = r.Numerator;
         Denominator = r.Denominator;
+    }
+
+    public void Norm(){
+        int a = Gcd(Numerator, Denominator);
+        Denominator /= a;
+        Numerator /= a;
+        if (Denominator < 0) {
+            Numerator = -Numerator;
+            Denominator = -Denominator;
+        }
     }
 
     public void setNum(int a) {
         Numerator = a / Gcd(a, Denominator);
         Denominator /= Gcd(a, Denominator);
     }
-
     public void setDenom(int b) throws IOException {
         if (b == 0) {
             throw new IOException("Denominator can't be equal to 0");
@@ -55,7 +61,6 @@ public class Rational implements Cloneable, Comparable<Rational> {
     public int GetNum() {
         return Numerator;
     }
-
     public int GetDenom() {
         return Denominator;
     }
@@ -96,27 +101,15 @@ public class Rational implements Cloneable, Comparable<Rational> {
         return new Rational(Numerator, Denominator * rhs);
     }
 
-    public Rational plusTo(Rational rhs) {
+    public Rational plusTo(Rational rhs) {  
         Numerator = Numerator * rhs.Denominator + rhs.Numerator * Denominator;
         Denominator *= rhs.Denominator;
-        int a = Gcd(Numerator, Denominator);
-        Denominator /= a;
-        Numerator /= a;
-        if (Denominator < 0) {
-            Numerator = -Numerator;
-            Denominator = -Denominator;
-        }
+        Norm();
         return new Rational(this);
     }
     public Rational plusTo(int rhs) {
         Numerator += rhs * Denominator;
-        int a = Gcd(Numerator, Denominator);
-        Denominator /= a;
-        Numerator /= a;
-        if (Denominator < 0) {
-            Numerator = -Numerator;
-            Denominator = -Denominator;
-        }
+        Norm();
         return new Rational(this);
     }
 
@@ -212,6 +205,11 @@ public class Rational implements Cloneable, Comparable<Rational> {
         }
         String a = Integer.toString(Numerator) + '/';
         a += Integer.toString(Denominator);
+        return a;
+    }
+    
+    public double toDouble() {
+        double a = ((double)Numerator / (double)Denominator);
         return a;
     }
 
